@@ -71,7 +71,7 @@ function updateToolTip(chosenYAxis, circlesGroup) {
         label = "Obese(%)";
     }
     var toolTip= d3.tip()
-        .attr("class","tooltip")
+        .attr("class","d3-tip")
         .offset([80, -60])
         .html(function(d){
             return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
@@ -106,5 +106,27 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
     .domain([0,d3.max(datas, d=>d.poverty)])
     .range([height, 0]);
 
-    //
+    //Create initial axis functions
+    var bottomAxis = d3.axisBottom(xLinearScale);
+    var leftAxis = d3.axisleft(yLinearScale);
+
+    // append y axis
+    var yAxis = ChartGroup.append("g")
+    .classed("aText", true)
+    .attr("transform", `translate(0, ${height})`)
+    .call(leftAxis)
+
+    //append y axis 
+    ChartGroup.append("g")
+    .call(bottomAxis);
+
+    //append initial circles
+    var circlesGroup = ChartGroup.selectAll("circle")
+        .data(datas)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xLinearScale(d.poverty))
+        .attr("cy", d => yLinearScale(d[chosenYAxis]))
+        .attr("r", 10)
+        .classed("stateText stateCircle", true)
 })
