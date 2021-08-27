@@ -129,4 +129,8 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
         .attr("cy", d => yLinearScale(d[chosenYAxis]))
         .attr("r", 10)
         .classed("stateText stateCircle", true)
+        
+    ChartGroup.append("text")
+        .text(d => d.attr)
+        .classed("stateText", true)
 })
