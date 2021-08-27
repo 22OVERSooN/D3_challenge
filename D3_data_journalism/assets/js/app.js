@@ -26,12 +26,23 @@ var ChartGroup = svg.append("g").attr("transform", `translate(${margin.left},${m
 //Initial Params
 var chosenYAxis = "poverty";
 
+//function used for updating y-scale var upon click on axis label
+
 //function used for updating y-scal var upon click on axis lable
 //function yScale()
 
 //Retrive data from the CSV file and execute everything below
 d3.csv("/assets/data/data.csv").then(function(datas, err){
     if (err) throw err;
-    for (var i = 0; i < data.length; i++) {
-        console.log(datas[i].poverty);}
+
+    //parse data from str to int
+    datas.forEach(function(data){
+        data.poverty = +data.poverty;
+        data.healthcare = +data.healthcare;
+        data.obesity = +data.obesity;
+        data.smokes = data.smokes
+    });
+
+    //yLinearScale function above csv import
+    var yLinearScale = yScale(datas, chosenYAxis)
 })
