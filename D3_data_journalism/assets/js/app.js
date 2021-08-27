@@ -24,13 +24,69 @@ var svg = d3
 var ChartGroup = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
 //Initial Params
-var chosenYAxis = "poverty";
+var chosenYAxis = "healthcare";
 
 //function used for updating y-scale var upon click on axis label
+function yScale(datas, chosenYAxis) {
+    var yLinearScale = d3.scaleLiniear()
+    .domain([d3.min(data, d=>[chosenYAxis])*0.8,
+    d3.max(data, d=>[chosenYAxis])*1.2
+    ])
+    .range([0, width]);
 
+    return yLinearScale
+}
 //function used for updating y-scal var upon click on axis lable
-//function yScale()
+function rendenAxes(newYScale, yAxis) {
+    var leftAxis = d3.axisleft(newYScale);
 
+    yAxis.transition()
+    .duration(1000)
+    .call(leftAxis);
+
+    return yAxis;
+}
+
+//function used for updating circles group with a transition to new circles
+function renderCircles(circlesGroup, newYScale, chosenYAxis){
+
+    circlesGroup.transition()
+    .duraion(1000)
+    .attr("cx", d=> newYScale(d[chosenYAxis]));
+    //<----add the d.abbr here and put into the circle
+
+    return circlesGroup;
+}
+
+//function used for updating circles group with new tooltip
+function updateToolTip(chosenYAxis, circlesGroup) {
+    var label;
+    if(chosenYAxis === "healthcare"){
+        label = "Lacks Healthcare(%)";
+    }
+    if(chosenYAxis === "smokes"){
+        label = "Smokes(%)";
+    }
+    else {
+        label = "Obese(%)";
+    }
+    var toolTip= d3.tip()
+        .attr("class","tooltip")
+        .offset([80, -60])
+        .html(function(d){
+            return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+        });
+        circlesGroup.call(toolTip);
+
+        circlesGroup.on("mouseover", function(data){
+            toolTip.show(data)
+        })
+        .on("mouseout", function(data,index){
+            toolTip.hide(data);
+
+            return circlesGroup
+        })
+}
 //Retrive data from the CSV file and execute everything below
 d3.csv("/assets/data/data.csv").then(function(datas, err){
     if (err) throw err;
@@ -45,4 +101,10 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
 
     //yLinearScale function above csv import
     var yLinearScale = yScale(datas, chosenYAxis)
+
+    var xLinearScale = d3.scaleLiniear()
+    .domain([0,d3.max(datas, d=>d.poverty)])
+    .range([height, 0]);
+
+    //
 })
