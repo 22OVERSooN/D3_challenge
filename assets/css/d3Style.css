@@ -19,7 +19,7 @@
 }
 
 .inactive:hover {
-  fill: #000;
+  fill: rgb(14, 49, 111);
   cursor: pointer;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .stateCircle {
-  fill: #064d6c;
+  fill: #08587b;
   stroke: #e3e3e3;
 }
 
