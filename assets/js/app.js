@@ -4,18 +4,19 @@ var svgHeight = 500;
 var margin = {
     top:20,
     right:40,
-    bottom:80,
+    bottom:180,
     left:100
 };
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
+//append to div classed chart to the scatter element
+var chart = d3.select("#scatter").append("div").classed("chart", true)
 // Create an SVG wrapper. append and SVG group that wil hold our chart,
 // and shift the latter by left and top margins.
 
-var svg = d3
-.select("#scatter")
+var svg = chart
 .append("svg")
 .attr("width", svgWidth)
 .attr("height", svgHeight);
@@ -25,14 +26,15 @@ var ChartGroup = svg.append("g").attr("transform", `translate(${margin.left},${m
 
 //Initial Params
 var chosenYAxis = "healthcare";
+var chosenXAxis = "poverty"
 
 //function used for updating y-scale var upon click on axis label
 function yScale(datas, chosenYAxis) {
     var yLinearScale = d3.scaleLinear()
-    .domain([d3.min(datas, d=>[chosenYAxis])*0.8,
-    d3.max(datas, d=>[chosenYAxis])*1.2
+    .domain([d3.min(datas, d=>d[chosenYAxis])*0.8,
+    d3.max(datas, d=>d[chosenYAxis])*1.2
     ])
-    .range([0, width]);
+    .range([height, 0]);
 
     return yLinearScale
 }
@@ -52,8 +54,7 @@ function renderCircles(circlesGroup, newYScale, chosenYAxis){
 
     circlesGroup.transition()
     .duraion(1000)
-    .attr("cx", d=> newYScale(d[chosenYAxis]));
-    //<----add the d.abbr here and put into the circle
+    .attr("cy", d=> newYScale(d[chosenYAxis]));
 
     return circlesGroup;
 }
