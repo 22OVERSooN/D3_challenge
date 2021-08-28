@@ -28,9 +28,9 @@ var chosenYAxis = "healthcare";
 
 //function used for updating y-scale var upon click on axis label
 function yScale(datas, chosenYAxis) {
-    var yLinearScale = d3.scaleLiniear()
-    .domain([d3.min(data, d=>[chosenYAxis])*0.8,
-    d3.max(data, d=>[chosenYAxis])*1.2
+    var yLinearScale = d3.scaleLinear()
+    .domain([d3.min(datas, d=>[chosenYAxis])*0.8,
+    d3.max(datas, d=>[chosenYAxis])*1.2
     ])
     .range([0, width]);
 
@@ -38,7 +38,7 @@ function yScale(datas, chosenYAxis) {
 }
 //function used for updating y-scal var upon click on axis lable
 function rendenAxes(newYScale, yAxis) {
-    var leftAxis = d3.axisleft(newYScale);
+    var leftAxis = d3.axisLeft(newYScale);
 
     yAxis.transition()
     .duration(1000)
@@ -74,7 +74,7 @@ function updateToolTip(chosenYAxis, circlesGroup) {
         .attr("class","d3-tip")
         .offset([80, -60])
         .html(function(d){
-            return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+            return (`${d.abbr}<br>${label} ${d[chosenXAxis]}`);
         });
         circlesGroup.call(toolTip);
 
@@ -102,13 +102,13 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
     //yLinearScale function above csv import
     var yLinearScale = yScale(datas, chosenYAxis)
 
-    var xLinearScale = d3.scaleLiniear()
+    var xLinearScale = d3.scaleLinear()
     .domain([0,d3.max(datas, d=>d.poverty)])
     .range([height, 0]);
 
     //Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
-    var leftAxis = d3.axisleft(yLinearScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
 
     // append y axis
     var yAxis = ChartGroup.append("g")
@@ -162,10 +162,10 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
 
         // append x axis
         ChartGroup.append("text")
-        .attr("transform", `translate(${width / 2}, ${height + 20})`)
-        .attr("x", 0)
-        .attr("y", 20)
-        .attr("dy", "1em")
+        .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
+        // .attr("x", 0)
+        // .attr("y", 20)
+        // .attr("dy", "1em")
         .classed("aText", true)
         .text("In Poverty(%)")
 
