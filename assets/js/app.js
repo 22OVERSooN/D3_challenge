@@ -28,14 +28,6 @@ var ChartGroup = svg.append("g").attr("transform", `translate(${margin.left},${m
 var chosenYAxis = "healthcare";
 var chosenXAxis = "poverty"
 
-//gridlines in x axis function
-function make_x_gridlines(){
-    return d3.axisBottom(x).ticks(5)
-}
-//gridlines in y axis function
-function make_y_gridlines(){
-    return d3.axisLeft(y).ticks(5)
-}
 
 //function used for updating y-scale var upon click on axis label
 function yScale(datas, chosenYAxis) {
@@ -243,7 +235,7 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
                     .classed("active", false)
                     .classed("inactive",true);
                 }
-                if (chosenYAxis === "smokes"){
+                else if (chosenYAxis === "smokes"){
                     smokesLabel
                     .classed("active", true)
                     .classed("inactive",false);
@@ -252,7 +244,7 @@ d3.csv("/assets/data/data.csv").then(function(datas, err){
                     .classed("inactive",true);
                     obesLabel
                     .classed("active", false)
-                    .classed("inactive",ture);
+                    .classed("inactive",true);
                 }
                 else{
                     obesLabel
